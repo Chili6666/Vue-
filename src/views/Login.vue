@@ -2,7 +2,7 @@
   <div class="login-box">
     <h4>Login</h4>
     <hr />
-    {{isloading}}
+    {{ isloading }}
     <form class="form-group" @submit.prevent="login">
       <div class="input-field">
         <label>Username</label>
@@ -10,7 +10,7 @@
       </div>
       <div>
         <label>Movie Db Token</label>
-        <input required v-model="token" placeholder="Token" />
+        <input required v-model="requestToken" placeholder="Token" />
       </div>
       <hr />
       <button type="submit">Login</button>
@@ -20,25 +20,35 @@
 
 
 <script lang="ts">
-import { ref } from "vue";
+import { ref, reactive, toRefs } from "vue";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "vue-router";
+import { IUser } from "@/models/user";
+import AuthService from "@/services/AuthService";
 
 export default {
   setup() {
     const store = useUserStore();
     const router = useRouter();
 
-    const username = ref("");
-    const token = ref("");
+    const user = reactive<IUser>({
+      username: "",
+      requestToken: "",
+    });
+
     const isloading = ref(false);
 
     async function login() {
       isloading.value = true;
-      let loginRes = await store.login(username.value, token.value);
+      window.localStorage.setItem("username", user.username);
+      window.localStorage.setItem("token", user.requestToken);
+
+      let loginRes = await AuthService.login(user);
       isloading.value = false;
 
       if (loginRes) {
+        console.log("login success.");
+        store.SetUser(user);
         router.push("/");
       } else {
         console.log("error during login");
@@ -46,8 +56,7 @@ export default {
     }
 
     return {
-      username,
-      token,
+      ...toRefs(user),
       login,
       isloading,
     };

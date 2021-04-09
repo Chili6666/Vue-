@@ -17,7 +17,7 @@ export default {
     const store = useUserStore();
 
     function logout() {
-      store.logout();
+      store.RemoveUser();
       router.push("/login");
     }
 
