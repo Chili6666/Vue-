@@ -8,27 +8,36 @@
 </template>
 
 <script>
+import { onMounted } from "vue";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "vue-router";
+import AuthService from "@/services/AuthService";
 
 export default {
   setup() {
     const router = useRouter();
     const store = useUserStore();
 
+    onMounted(() => {
+      document.title = "Movie DB Sample";
+    });
+
     function logout() {
+      AuthService.logout();
       store.RemoveUser();
       router.push("/login");
     }
 
     if (!store || !router) {
       console.log("Router or State not initialized");
-    } else {
+    } 
+    else {
       //router guard
       router.beforeEach((to, from, next) => {
         if (to.name !== "Login" && !store.isAuthenticated) {
           next({ name: "Login" });
-        } else {
+        } 
+        else {
           next();
         }
       });
