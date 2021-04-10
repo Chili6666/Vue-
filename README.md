@@ -1,4 +1,4 @@
-# test
+# movie db sample
 
 ## Project setup
 ```

@@ -9,6 +9,10 @@
     <form @submit.prevent="login">
       <input required v-model="username" placeholder="Name" />
       <input required v-model="requestToken" placeholder="Token" />
+      <label class="token-label">
+        <input v-model="rememberLoginInformation" type="checkbox" />
+        Remember token
+      </label>
       <button type="submit">Login</button>
     </form>
   </div>
@@ -16,10 +20,10 @@
 
 
 <script lang="ts">
-import { ref, reactive, toRefs } from "vue";
+import { ref, reactive, toRefs, onMounted } from "vue";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "vue-router";
-import { IUser } from "@/models/user";
+import { IUser } from "@/models/IUser";
 import AuthService from "@/services/AuthService";
 import Spinner from "@/components/spinner.vue";
 
@@ -37,17 +41,18 @@ export default {
     });
 
     const isloading = ref(false);
+    const rememberLoginInformation = ref(false);
 
-    async function login() {
+    async function login(): Promise<void> {
       isloading.value = true;
-      window.localStorage.setItem("username", user.username);
-      window.localStorage.setItem("token", user.requestToken);
 
-      let loginRes = await AuthService.login(user);
+      let loginRes = await AuthService.login(
+        user,
+        rememberLoginInformation.value
+      );
       isloading.value = false;
 
       if (loginRes) {
-        console.log("login success.");
         store.SetUser(user);
         router.push("/");
       } else {
@@ -55,10 +60,21 @@ export default {
       }
     }
 
+    onMounted((): void => {
+      if (window.localStorage.getItem(AuthService.usernameKey) !== "") {
+        user.username = window.localStorage.getItem(AuthService.usernameKey) as string;
+      }
+      if (window.localStorage.getItem(AuthService.requestTokenKey) !== "") {
+        user.requestToken = window.localStorage.getItem(AuthService.requestTokenKey) as string;
+      }
+    });
+
     return {
+      //When passing user reactive object to the component, we can turn them back into reactive properties using the toRefs function.
       ...toRefs(user),
       login,
       isloading,
+      rememberLoginInformation,
     };
   },
 };
@@ -107,11 +123,15 @@ button {
 
 input {
   padding: 0.5rem;
-    margin: 4px 0px;
+  margin: 4px 0px;
 }
 
 form {
   display: flex;
   flex-flow: column;
+}
+
+.token-label {
+  text-align: left;
 }
 </style>

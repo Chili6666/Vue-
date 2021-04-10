@@ -2,7 +2,7 @@
 //https://github.com/gintsgints/quarkus-fullstack/blob/master/webapp/src/store/index.ts
 
 import { reactive, inject } from 'vue'
-import { IUser } from "@/models/user";
+import { IUser } from "@/models/IUser";
 
 export class UserStore {
 

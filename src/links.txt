@@ -1,0 +1,10 @@
+Auth flow with comp api 
+https://dev.to/adamcowley/how-to-build-an-authentication-into-a-vue3-application-200b
+
+https://bezkoder.com/jwt-vue-vuex-authentication/
+
+
+Axios install:
+npm install axios --save
+
+
