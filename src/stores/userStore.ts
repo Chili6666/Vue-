@@ -26,10 +26,12 @@ export class UserStore {
 }
 
 
-export const stateSymbol = Symbol('userStore')
-
 //create a new reactive state instance
-export const createUserStore = () => { return reactive(new UserStore()) }
+const reactiveStore = reactive(new UserStore())
+
+export const stateSymbol = Symbol('userStore')
 
 //Dependency injection
 export const useUserStore = () => inject(stateSymbol) as UserStore
+
+export default reactiveStore;

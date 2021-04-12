@@ -30,14 +30,12 @@ export default {
 
     if (!store || !router) {
       console.log("Router or State not initialized");
-    } 
-    else {
+    } else {
       //router guard
       router.beforeEach((to, from, next) => {
         if (to.name !== "Login" && !store.isAuthenticated) {
           next({ name: "Login" });
-        } 
-        else {
+        } else {
           next();
         }
       });

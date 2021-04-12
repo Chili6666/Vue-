@@ -1,6 +1,6 @@
 import { IResponse } from "../models/IResponse";
 import { axioInstance } from "@/helper/http-common";
-import { apiKey } from "../env";
+import { apiKey } from "../keys";
 
 
 class MovieDataService {
@@ -11,13 +11,13 @@ class MovieDataService {
     };
 
 
-    public getTrendingMoives = async (): Promise<IResponse> => {
+    public getTrendingMovies = async (): Promise<IResponse> => {
         const res = await axioInstance.get(`/trending/movie/week?api_key=${apiKey}`);
         return res?.data as IResponse;
     };
 
     public getTopMovies = async (): Promise<IResponse> => {
-        const res = await axioInstance.get(`//movie/top_rated?api_key=${apiKey}`);
+        const res = await axioInstance.get(`/movie/top_rated?api_key=${apiKey}`);
         return res?.data as IResponse;
     };
 }

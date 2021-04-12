@@ -20,12 +20,16 @@
 
 
 <script lang="ts">
-import { ref, reactive, toRefs, onMounted } from "vue";
+import { reactive, toRefs } from "vue";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "vue-router";
 import { IUser } from "@/models/IUser";
-import AuthService from "@/services/AuthService";
-import Spinner from "@/components/spinner.vue";
+import Spinner from "@/components/Spinner.vue";
+import AuthService, {
+  USER_NAME_KEY,
+  REQUEST_TOKEN_KEY,
+} from "@/services/AuthService";
+
 
 export default {
   components: {
@@ -35,22 +39,25 @@ export default {
     const store = useUserStore();
     const router = useRouter();
 
-    const user = reactive<IUser>({
-      username: "",
-      requestToken: "",
+    //reactive user
+    const uiState = reactive({
+      isloading: false,
+      rememberLoginInformation: false,
     });
 
-    const isloading = ref(false);
-    const rememberLoginInformation = ref(false);
+    const user = reactive<IUser>({
+      username: window.localStorage.getItem(USER_NAME_KEY) as string,
+      requestToken: window.localStorage.getItem(REQUEST_TOKEN_KEY) as string,
+    });
 
     async function login(): Promise<void> {
-      isloading.value = true;
+      uiState.isloading = true;
 
       let loginRes = await AuthService.login(
         user,
-        rememberLoginInformation.value
+        uiState.rememberLoginInformation
       );
-      isloading.value = false;
+      uiState.isloading = false;
 
       if (loginRes) {
         store.SetUser(user);
@@ -60,21 +67,11 @@ export default {
       }
     }
 
-    onMounted((): void => {
-      if (window.localStorage.getItem(AuthService.usernameKey) !== "") {
-        user.username = window.localStorage.getItem(AuthService.usernameKey) as string;
-      }
-      if (window.localStorage.getItem(AuthService.requestTokenKey) !== "") {
-        user.requestToken = window.localStorage.getItem(AuthService.requestTokenKey) as string;
-      }
-    });
-
     return {
       //When passing user reactive object to the component, we can turn them back into reactive properties using the toRefs function.
       ...toRefs(user),
+      ...toRefs(uiState),
       login,
-      isloading,
-      rememberLoginInformation,
     };
   },
 };

@@ -1,13 +1,14 @@
 /* eslint-disable */
 
 import { IUser } from "@/models/IUser";
+import UserStore from "@/stores/userStore";
+
+export const USER_NAME_KEY: string = 'username';
+export const REQUEST_TOKEN_KEY: string = 'token';
 
 class AuthService {
 
-    public readonly usernameKey: string = 'username';
-    public readonly requestTokenKey: string = 'token';
-
-    constructor(){
+    constructor() {
         console.log('AuthSerice created')
     }
 
@@ -18,10 +19,11 @@ class AuthService {
 
         if (user.username !== '' && user.requestToken !== '') {
             if (rememberLoginInformation) {
-                window.localStorage.setItem(this.usernameKey, user.username);
-                window.localStorage.setItem(this.requestTokenKey, user.requestToken);
+                window.localStorage.setItem(USER_NAME_KEY, user.username);
+                window.localStorage.setItem(REQUEST_TOKEN_KEY, user.requestToken);
             }
             console.log('***** login succeeded *****');
+            UserStore.SetUser(user);
             return true;
         }
         else {
@@ -29,11 +31,12 @@ class AuthService {
         }
     }
 
-    public logout() : void {
+    public logout(): void {
         console.log('**** logout ******');
-        window.localStorage.removeItem(this.usernameKey);
-        window.localStorage.removeItem(this.requestTokenKey);
+        window.localStorage.removeItem(USER_NAME_KEY);
+        window.localStorage.removeItem(REQUEST_TOKEN_KEY);
     }
 }
+
 
 export default new AuthService();
