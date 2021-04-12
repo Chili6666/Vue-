@@ -16,6 +16,10 @@ export class UserStore {
         return this._user != null;
     }
 
+    public get user(): IUser | null {
+        return this._user;
+    }
+
     public SetUser(user: IUser) {
         this._user = user;
     }

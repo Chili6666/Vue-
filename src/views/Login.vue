@@ -3,7 +3,7 @@
     <h4>Login</h4>
     <hr />
     <div v-if="isloading" class="container-loading">
-      <Spinner />
+      <Waitbar />
     </div>
 
     <form @submit.prevent="login">
@@ -24,7 +24,8 @@ import { reactive, toRefs } from "vue";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "vue-router";
 import { IUser } from "@/models/IUser";
-import Spinner from "@/components/Spinner.vue";
+import Waitbar from "@/components/Waitbar.vue";
+
 import AuthService, {
   USER_NAME_KEY,
   REQUEST_TOKEN_KEY,
@@ -33,7 +34,7 @@ import AuthService, {
 
 export default {
   components: {
-    Spinner,
+    Waitbar,
   },
   setup() {
     const store = useUserStore();
