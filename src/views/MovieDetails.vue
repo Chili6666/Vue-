@@ -1,10 +1,38 @@
 <template>
   <div>
-    <h1>Movie details</h1>
+    <div v-if="isloading">is Loading</div>
+    <div v-else>
+      <div class="demo-wrap">
+        <img
+          class="demo-bg"
+          :src="moviePosterUrl(movieDetails.poster_path)"
+          alt="bdimage"
+        />
 
-    <div class="container">
-      <div v-for="(movieArtist, id) in movieArtists" :key="id">
-        <img :src="fullpath(movieArtist.profile_path)" alt="video image" />
+        <div class="card">
+          <img
+            :src="moviePosterUrl(movieDetails.poster_path)"
+            alt="video image"
+          />
+          <div>
+            <h2>{{ movieDetails.title }}</h2>
+            <p class="type">{{ movieDetails.overview }}</p>
+          </div>
+        </div>
+      </div>
+      <h2>Artists</h2>
+      <div class="artist-container">
+        <div v-for="(movieArtist, id) in movieArtists" :key="id">
+          <div class="artist-card">
+            <img
+              :src="artistFaceUrl(movieArtist.profile_path)"
+              alt="video image"
+              class="artist-img"
+            />
+            <p>{{ movieArtist.name }}</p>
+            <p class="p">{{ movieArtist.character }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -14,7 +42,7 @@
 import { defineComponent, onMounted, Ref, ref } from "vue";
 import MovieService from "@/services/DataService";
 import { combineUrlPath } from "../helper/urlExtensions";
-import { imageBaseUrl } from "../env";
+import { imageBaseUrl, imageSize } from "../env";
 
 export default defineComponent({
   props: {
@@ -28,35 +56,49 @@ export default defineComponent({
     const movieDetails = ref();
     const movieCredits = ref();
     const movieArtists = ref();
+    const isloading = ref(true);
+
     onMounted(() => {
       loadData();
     });
 
-    function fullpath(image: string) {
-      //https://image.tmdb.org/t/p/w138_and_h175_face/hIuDik6KDmHLrqZWxBVdXzUw1kq.jpg
+    function artistFaceUrl(image: string) {
       return combineUrlPath(
         combineUrlPath(imageBaseUrl, "w138_and_h175_face"),
         image
       );
     }
 
+    function moviePosterUrl(image: string) {
+      return combineUrlPath(combineUrlPath(imageBaseUrl, imageSize), image);
+    }
+
     async function loadData() {
       try {
+        isloading.value = true;
         const movieDetaildata = await MovieService.getMovieDetails(props.id);
         movieDetails.value = movieDetaildata;
         const movieCreditData = await MovieService.getMovieCredits(props.id);
         movieCredits.value = movieCreditData;
-        movieArtists.value = movieCreditData.cast;
+        movieArtists.value = movieCreditData?.cast.slice(0, 5);
+        
+
+        isloading.value = false;
       } catch (err) {
         console.log(err);
+        isloading.value = false;
       }
     }
+
 
     return {
       movieDetails,
       movieCredits,
       movieArtists,
-      fullpath,
+      artistFaceUrl,
+      moviePosterUrl,
+      isloading,
+
     };
   },
 });
@@ -64,8 +106,57 @@ export default defineComponent({
 
 
 <style scoped>
-  .container{
-    display: flex;
-      overflow-x: auto;
-  }
+.demo-wrap {
+  overflow: hidden;
+  position: relative;
+}
+
+.demo-bg {
+  opacity: 0.3;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: auto;
+}
+
+.card {
+  display: flex;
+  background-color: black;
+  color: white;
+  padding: 30px;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.card img {
+  height: 100%;
+  width: 300px;
+  margin: 0px 30px 0px 0px;
+  border-radius: 10px;
+}
+
+.artist-container {
+  display: flex;
+  overflow-x: auto;
+}
+
+.artist-card {
+  margin: 10px;
+  border-radius: 10px;
+  /* offset-x | offset-y | blur-radius | color */
+  box-shadow: 4px 4px 10px rgb(187, 187, 187);
+}
+
+.artist-img {
+  border-radius: 8px 8px 0px 0px;
+}
+
+.p {
+  font-size: 13px;
+}
+
+.test {
+  background-image: "https://image.tmdb.org/t/p/w500//lPsD10PP4rgUGiGR4CCXA6iY0QQ.jpg";
+}
 </style>
