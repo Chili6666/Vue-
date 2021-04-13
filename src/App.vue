@@ -5,7 +5,9 @@
     <router-link to="/about">About</router-link>
     <span v-if="store.isAuthenticated"> | <a @click="logout">Logout</a></span>
   </div>
-  <router-view />
+  <transition name="fade" mode="out-in">
+    <router-view />
+  </transition>
 </template>
 
 <script>
@@ -76,9 +78,19 @@ export default {
   color: #42b983;
 }
 
-.img{
+.img {
   width: 100px;
   height: 100px;
   padding: 0px 30px 0px 0px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
