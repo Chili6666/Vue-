@@ -28,6 +28,7 @@
               :src="artistFaceUrl(movieArtist.profile_path)"
               alt="video image"
               class="artist-img"
+              @error="imgUrlAlt"
             />
             <p>{{ movieArtist.name }}</p>
             <p class="p">{{ movieArtist.character }}</p>
@@ -81,7 +82,6 @@ export default defineComponent({
         const movieCreditData = await MovieService.getMovieCredits(props.id);
         movieCredits.value = movieCreditData;
         movieArtists.value = movieCreditData?.cast.slice(0, 5);
-        
 
         isloading.value = false;
       } catch (err) {
@@ -90,6 +90,17 @@ export default defineComponent({
       }
     }
 
+    function logo() {
+      let uui = 'src="' + require("../assets/logo.png") + '"';
+      console.log(uui);
+      return 'src="' + require("../assets/logo.png") + '"';
+    }
+
+    function imgUrlAlt(event: any) {
+      //event.target.src = require("@/assets/logo.png");
+
+      event.target.src = "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg";
+    }
 
     return {
       movieDetails,
@@ -98,7 +109,7 @@ export default defineComponent({
       artistFaceUrl,
       moviePosterUrl,
       isloading,
-
+      imgUrlAlt,
     };
   },
 });
@@ -112,7 +123,7 @@ export default defineComponent({
 }
 
 .demo-bg {
-  opacity: 0.3;
+  opacity: 0.1;
   position: absolute;
   left: 0;
   top: 0;
@@ -144,11 +155,13 @@ export default defineComponent({
 .artist-card {
   margin: 10px;
   border-radius: 10px;
+  max-width: 140px;
   /* offset-x | offset-y | blur-radius | color */
   box-shadow: 4px 4px 10px rgb(187, 187, 187);
 }
 
 .artist-img {
+
   border-radius: 8px 8px 0px 0px;
 }
 
@@ -156,7 +169,7 @@ export default defineComponent({
   font-size: 13px;
 }
 
-.test {
+/* .test {
   background-image: "https://image.tmdb.org/t/p/w500//lPsD10PP4rgUGiGR4CCXA6iY0QQ.jpg";
-}
+} */
 </style>
