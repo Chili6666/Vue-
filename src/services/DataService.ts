@@ -1,4 +1,8 @@
 import { IResponse } from "../models/IResponse";
+import { IMovie } from "../models/IMovie";
+import { IMovieCredits } from "../models/IMovieCredits";
+import { IArtist } from "../models/IArtist";
+
 import { axioInstance } from "@/helper/http-common";
 import UserStore from "@/stores/userStore";
 
@@ -18,6 +22,17 @@ class MovieDataService {
     public getTopMovies = async (): Promise<IResponse> => {
         const res = await axioInstance.get(`/movie/top_rated?api_key=${UserStore.user?.requestToken}`);
         return res?.data as IResponse;
+    };
+
+
+    public getMovieDetails = async (id: string): Promise<IMovie> => {
+        const res = await axioInstance.get(`/movie/${id}?api_key=${UserStore.user?.requestToken}`);
+        return res.data as IMovie;
+    };
+
+    public getMovieCredits = async (id: string): Promise<IMovieCredits> => {
+        const res = await axioInstance.get(`/movie/${id}/credits?api_key=${UserStore.user?.requestToken}`);
+        return res.data as IMovieCredits;
     };
 }
 

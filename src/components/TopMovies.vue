@@ -1,17 +1,13 @@
 <template>
   <div class="card-container">
-    <div v-for="(movie, id) in trendingMoviesData" :key="id" class="card">
-      <img :src="movie.full_poster_path" alt="video image" />
-
-      <CircleProgress :value="movie.vote_average" class="rate" />
-      <div class="card-details">
-        <p class="title">
-          {{ movie.original_title }}
-        </p>
-        <div>
-          {{ movie.release_date }}
-        </div>
-      </div>
+    <div v-for="(movie, id) in trendingMoviesData" :key="id">
+      <MovieCard
+        :title="movie.original_title"
+        :releaseDate="movie.release_date"
+        :imageUrl="movie.full_poster_path"
+        :movieId="movie.id"
+        :voteAverage="movie.vote_average"
+      />
     </div>
   </div>
 </template>
@@ -23,11 +19,11 @@ import MovieService from "@/services/DataService";
 import { IMovie } from "@/models/IMovie";
 import { combineUrlPath } from "../helper/urlExtensions";
 import { imageBaseUrl, imageSize } from "../env";
-import CircleProgress from "@/components/CircleProgress.vue";
+import MovieCard from "@/components/MovieCard.vue";
 
 export default {
   components: {
-    CircleProgress,
+    MovieCard,
   },
   setup() {
     const trendingMoviesData: Ref<IMovie[]> = ref([]);
@@ -65,31 +61,5 @@ export default {
   display: flex;
   overflow-x: auto;
   height: 420px;
-}
-
-.card {
-  padding: 10px;
-  width: 100%;
-  height: 250px;
-  min-height: 100px;
-  position: relative;
-}
-img {
-  height: 100%;
-  position: relative;
-  border-radius: 10px;
-  box-shadow: 4px 4px 3px grey;
-}
-
-.rate {
-  transform: translate(10px, -30px);
-}
-
-.title {
-  font-weight: bold;
-}
-
-.card-details{
-  transform: translate(0px, -30px);
 }
 </style>

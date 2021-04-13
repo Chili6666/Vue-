@@ -22,10 +22,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
-
-
-
-  
+  {
+    path: "/moviedetails/:id", //<-- notice the colon!  ****************************
+    name: "Moviedetails",
+    props: true,
+    component: () => import(/* webpackChunkName: "about" */ "../views/MovieDetails.vue"),
+  },
   {
     // path: "*",
     path: "/:catchAll(.*)",

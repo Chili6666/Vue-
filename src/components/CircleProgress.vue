@@ -40,7 +40,6 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  /* transform: translate(10px, -30px); */
 }
 .circle {
   display: flex;
