@@ -43,7 +43,7 @@ export default {
     //reactive user
     const uiState = reactive({
       isloading: false,
-      rememberLoginInformation: false,
+      rememberLoginInformation: true,
     });
 
     const user = reactive<IUser>({
