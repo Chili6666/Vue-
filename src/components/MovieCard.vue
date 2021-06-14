@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <router-link :to="{ name: 'Moviedetails', params: { id: movieId } }">
-      <img :src="imageUrl" alt="video image" />
+      <img :src="imageUrl" alt="video image" :title="tooltip"/>
     </router-link>
     <CircleProgress :value="voteAverage" class="rate" />
     <div class="card-details">
@@ -46,6 +46,10 @@ export default defineComponent({
     releaseDate: {
       type: String,
       required: true,
+    },
+    tooltip: {
+      type: String,
+      required: false,
     },
   },
 });

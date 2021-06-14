@@ -1,4 +1,4 @@
-
+//extension for merging multiple url. straightforward without checking for illegal charators
 export function combineUrlPath(path1: string, path2: string) : string{
 
     if (path1 && path2) {

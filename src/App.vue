@@ -5,6 +5,8 @@
     <router-link to="/about">About</router-link>
     <span v-if="store.isAuthenticated"> | <a @click="logout">Logout</a></span>
   </div>
+   <hr />
+
   <transition name="fade" mode="out-in">
     <router-view />
   </transition>
@@ -62,7 +64,7 @@ export default {
 }
 
 #nav {
-  padding: 30px;
+  padding: 5px;
   display: flex;
   align-items: center;
   justify-content: center;

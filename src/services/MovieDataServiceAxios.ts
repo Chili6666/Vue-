@@ -1,13 +1,12 @@
 import { IResponse } from "../models/IResponse";
 import { IMovie } from "../models/IMovie";
 import { IMovieCredits } from "../models/IMovieCredits";
-import { IArtist } from "../models/IArtist";
 
 import { axioInstance } from "@/helper/http-common";
 import UserStore from "@/stores/userStore";
 
 
-class MovieDataService {
+class MovieDataServiceAxios {
 
     public getPopularMovies = async (): Promise<IResponse> => {
         const res = await axioInstance.get(`/movie/popular?api_key=${UserStore.user?.requestToken}`);
@@ -36,4 +35,4 @@ class MovieDataService {
     };
 }
 
-export default new MovieDataService();
+export default new MovieDataServiceAxios();

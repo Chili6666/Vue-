@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref } from "vue";
-import MovieService from "@/services/DataService";
+import MovieService from "@/services/MovieDataServiceAxios";
 import { combineUrlPath } from "../helper/urlExtensions";
 import { imageBaseUrl, imageSize } from "../env";
 

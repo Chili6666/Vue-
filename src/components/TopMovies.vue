@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { ref, Ref, onMounted } from "vue";
-import MovieService from "@/services/DataService";
+import MovieDataService from "@/services/MovieDataService";
 import { IMovie } from "@/models/IMovie";
 import { combineUrlPath } from "../helper/urlExtensions";
 import { imageBaseUrl, imageSize } from "../env";
@@ -36,7 +36,7 @@ export default {
 
     async function loadData() {
       try {
-        const moviedata = await MovieService.getTopMovies();
+        const moviedata = await MovieDataService.getTopMovies();
         //path the imagepath
         moviedata.results.forEach((item) => {
           item.full_poster_path = combineUrlPath(
